@@ -1,10 +1,17 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import useAuth from '../hooks/useAuth';
 
 export default function LandingPage() {
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
     <Container maxWidth="md" component="section" aria-label="Welcome">
       <Box sx={{ textAlign: 'center', mt: 10 }}>

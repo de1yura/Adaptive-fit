@@ -1,10 +1,10 @@
 import api from './axiosConfig';
 
 export const getTargets = () =>
-  api.get('/api/nutrition/targets');
+  api.get('/nutrition/targets');
 
 export const logNutrition = (payload) =>
-  api.post('/api/nutrition/log', payload);
+  api.post('/nutrition/log', payload);
 
 export const getHistory = () =>
-  api.get('/api/nutrition/log/history');
+  api.get('/nutrition/log/history');

@@ -15,3 +15,10 @@ node_modules/
 
 # Env (already tracked as placeholder, but keep for safety)
 # .env
+
+# Claude / project scaffolding
+.claude/
+scripts/
+tasks/
+docs/
+ADAPTIVEFIT_PRODUCTION_PLAN.md
