@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: adaptivefit-mysql
+    environment:
+      MYSQL_DATABASE: adaptivefit
+      MYSQL_USER: adaptivefit
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - adaptivefit-data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  adaptivefit-data:
