@@ -70,6 +70,7 @@ public class WorkoutService {
             dayMap.put("dayNumber", day.getDayNumber());
             dayMap.put("dayLabel", day.getDayLabel());
             dayMap.put("focusArea", day.getFocusArea());
+            dayMap.put("exerciseCount", workoutExerciseRepository.findByWorkoutDayId(day.getId()).size());
             dayMap.put("completed", completedDayIds.contains(day.getId()));
             daySchedules.add(dayMap);
         }
