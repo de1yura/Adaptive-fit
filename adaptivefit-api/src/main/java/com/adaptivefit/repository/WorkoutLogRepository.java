@@ -11,4 +11,6 @@ public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, Long> {
     List<WorkoutLog> findByUserIdAndCompletedAtBetween(Long userId, LocalDate start, LocalDate end);
 
     long countByUserId(Long userId);
+
+    List<WorkoutLog> findByUserId(Long userId);
 }
