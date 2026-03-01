@@ -8,3 +8,6 @@ export const getProgressData = () =>
 
 export const exportData = () =>
   api.get('/progress/export');
+
+export const getPlanHistory = () =>
+  api.get('/plans/history');
