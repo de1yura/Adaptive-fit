@@ -7,6 +7,8 @@ import com.adaptivefit.model.WorkoutPlan;
 import com.adaptivefit.model.enums.PlanStatus;
 import com.adaptivefit.repository.UserRepository;
 import com.adaptivefit.repository.WorkoutPlanRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/plans")
+@Tag(name = "Workout Plans", description = "View and manage workout plans")
 public class WorkoutPlanController {
 
     private final WorkoutPlanRepository workoutPlanRepository;
@@ -26,6 +29,7 @@ public class WorkoutPlanController {
     }
 
     @GetMapping("/current")
+    @Operation(summary = "Get current plan", description = "Returns the user's currently active workout plan")
     public ResponseEntity<WorkoutPlanResponse> getCurrentPlan(Authentication authentication) {
         Long userId = getUserId(authentication);
         WorkoutPlan plan = workoutPlanRepository.findByUserIdAndStatus(userId, PlanStatus.ACTIVE)
@@ -34,6 +38,7 @@ public class WorkoutPlanController {
     }
 
     @GetMapping("/history")
+    @Operation(summary = "Get plan history", description = "Returns all workout plan versions ordered by version descending")
     public ResponseEntity<List<WorkoutPlanResponse>> getPlanHistory(Authentication authentication) {
         Long userId = getUserId(authentication);
         List<WorkoutPlan> plans = workoutPlanRepository.findByUserIdOrderByVersionDesc(userId);
@@ -44,6 +49,7 @@ public class WorkoutPlanController {
     }
 
     @GetMapping("/{planId}")
+    @Operation(summary = "Get plan by ID", description = "Returns a specific workout plan by its ID")
     public ResponseEntity<WorkoutPlanResponse> getPlanById(
             @PathVariable Long planId,
             Authentication authentication) {

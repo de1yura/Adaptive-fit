@@ -11,6 +11,8 @@ import com.adaptivefit.repository.WeeklyCheckInRepository;
 import com.adaptivefit.repository.WorkoutPlanRepository;
 import com.adaptivefit.service.AdaptiveEngineService;
 import com.adaptivefit.service.EventLogService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/checkin")
+@Tag(name = "Check-In", description = "Weekly check-ins and adaptive plan adjustments")
 public class CheckInController {
 
     private final AdaptiveEngineService adaptiveEngineService;
@@ -45,6 +48,7 @@ public class CheckInController {
     }
 
     @PostMapping("/submit")
+    @Operation(summary = "Submit weekly check-in", description = "Submits a weekly check-in and triggers adaptive plan adjustments if needed")
     public ResponseEntity<AdaptationResponse> submitCheckIn(
             @Valid @RequestBody CheckInRequest request,
             Authentication authentication) {
@@ -67,6 +71,7 @@ public class CheckInController {
     }
 
     @GetMapping("/history")
+    @Operation(summary = "Get check-in history", description = "Returns all weekly check-ins ordered by week number descending")
     public ResponseEntity<List<WeeklyCheckIn>> getCheckInHistory(Authentication authentication) {
         Long userId = getUserId(authentication);
         List<WeeklyCheckIn> checkIns = weeklyCheckInRepository.findByUserIdOrderByWeekNumberDesc(userId);
@@ -74,6 +79,7 @@ public class CheckInController {
     }
 
     @GetMapping("/due")
+    @Operation(summary = "Check if check-in is due", description = "Returns whether 7 or more days have passed since the last check-in")
     public ResponseEntity<Map<String, Boolean>> isCheckInDue(Authentication authentication) {
         Long userId = getUserId(authentication);
 

@@ -8,6 +8,8 @@ import com.adaptivefit.model.WorkoutPlan;
 import com.adaptivefit.repository.UserProfileRepository;
 import com.adaptivefit.repository.UserRepository;
 import com.adaptivefit.service.OnboardingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/onboarding")
+@Tag(name = "Onboarding", description = "User onboarding and profile management")
 public class OnboardingController {
 
     private final OnboardingService onboardingService;
@@ -33,6 +36,7 @@ public class OnboardingController {
     }
 
     @PostMapping("/submit")
+    @Operation(summary = "Submit onboarding", description = "Submits the user's onboarding profile and generates an initial workout plan")
     public ResponseEntity<Map<String, Object>> submitOnboarding(
             @Valid @RequestBody OnboardingRequest request,
             Authentication authentication) {
@@ -47,6 +51,7 @@ public class OnboardingController {
     }
 
     @GetMapping("/status")
+    @Operation(summary = "Get onboarding status", description = "Returns whether the user has completed onboarding")
     public ResponseEntity<Map<String, Boolean>> getOnboardingStatus(Authentication authentication) {
         Long userId = getUserId(authentication);
         boolean completed = onboardingService.getOnboardingStatus(userId);
@@ -54,6 +59,7 @@ public class OnboardingController {
     }
 
     @GetMapping("/profile")
+    @Operation(summary = "Get user profile", description = "Returns the authenticated user's profile settings")
     public ResponseEntity<Map<String, Object>> getProfile(Authentication authentication) {
         Long userId = getUserId(authentication);
         UserProfile profile = userProfileRepository.findByUserId(userId)
@@ -75,6 +81,7 @@ public class OnboardingController {
     }
 
     @PutMapping("/profile")
+    @Operation(summary = "Update user profile", description = "Updates the authenticated user's profile settings")
     public ResponseEntity<Map<String, String>> updateProfile(
             @Valid @RequestBody OnboardingRequest request,
             Authentication authentication) {

@@ -7,6 +7,8 @@ import com.adaptivefit.model.NutritionLog;
 import com.adaptivefit.model.User;
 import com.adaptivefit.repository.UserRepository;
 import com.adaptivefit.service.NutritionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/nutrition")
+@Tag(name = "Nutrition", description = "Nutrition targets, logging, and history")
 public class NutritionController {
 
     private final NutritionService nutritionService;
@@ -30,12 +33,14 @@ public class NutritionController {
     }
 
     @GetMapping("/targets")
+    @Operation(summary = "Get nutrition targets", description = "Returns the user's current nutrition plan with macro targets")
     public ResponseEntity<NutritionPlanResponse> getTargets(Authentication authentication) {
         Long userId = getUserId(authentication);
         return ResponseEntity.ok(nutritionService.getTargets(userId));
     }
 
     @PostMapping("/log")
+    @Operation(summary = "Log nutrition", description = "Logs a nutrition entry with calories and macro breakdown")
     public ResponseEntity<Map<String, Object>> logNutrition(
             @Valid @RequestBody NutritionLogRequest request,
             Authentication authentication) {
@@ -50,6 +55,7 @@ public class NutritionController {
     }
 
     @GetMapping("/log/history")
+    @Operation(summary = "Get nutrition history", description = "Returns the user's nutrition log entries")
     public ResponseEntity<List<NutritionLog>> getHistory(Authentication authentication) {
         Long userId = getUserId(authentication);
         return ResponseEntity.ok(nutritionService.getHistory(userId));

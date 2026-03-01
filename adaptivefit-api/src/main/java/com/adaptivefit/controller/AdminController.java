@@ -4,6 +4,8 @@ import com.adaptivefit.exception.BadRequestException;
 import com.adaptivefit.model.EventLog;
 import com.adaptivefit.repository.EventLogRepository;
 import com.adaptivefit.service.DataExportService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
+@Tag(name = "Admin", description = "Admin event logs and data export")
 public class AdminController {
 
     private final EventLogRepository eventLogRepository;
@@ -32,6 +35,7 @@ public class AdminController {
     }
 
     @GetMapping("/events")
+    @Operation(summary = "Get event logs", description = "Returns event logs with optional filtering by event type and date range")
     public ResponseEntity<List<EventLog>> getEvents(
             @RequestParam(required = false) String eventType,
             @RequestParam(required = false) LocalDate startDate,
@@ -60,6 +64,7 @@ public class AdminController {
     }
 
     @GetMapping("/export/all")
+    @Operation(summary = "Export all user data", description = "Exports anonymised data for all users (admin only)")
     public ResponseEntity<List<Map<String, Object>>> exportAll(Authentication authentication) {
         checkAdmin(authentication);
         List<Map<String, Object>> data = dataExportService.exportAllUsers();
