@@ -6,6 +6,9 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import GoalStep from './GoalStep';
 import ExperienceStep from './ExperienceStep';
+import ScheduleStep from './ScheduleStep';
+import EquipmentStep from './EquipmentStep';
+import DietStep from './DietStep';
 
 const stepLabels = ['Goal', 'Experience', 'Schedule', 'Equipment', 'Diet', 'Body Stats'];
 
@@ -59,11 +62,11 @@ export default function OnboardingWizard() {
       case 1:
         return <ExperienceStep formData={formData} setFormData={setFormData} />;
       case 2:
-        return <Box>Schedule Step (Coming Soon)</Box>;
+        return <ScheduleStep formData={formData} setFormData={setFormData} />;
       case 3:
-        return <Box>Equipment Step (Coming Soon)</Box>;
+        return <EquipmentStep formData={formData} setFormData={setFormData} />;
       case 4:
-        return <Box>Diet Step (Coming Soon)</Box>;
+        return <DietStep formData={formData} setFormData={setFormData} />;
       case 5:
         return <Box>Body Stats Step (Coming Soon)</Box>;
       default:
