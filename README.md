@@ -44,7 +44,13 @@ MAIL_USERNAME=changeme@gmail.com
 MAIL_PASSWORD=changeme
 ```
 
-> The `JWT_SECRET` must be at least 32 characters.
+> The `JWT_SECRET` must be at least 32 characters. run:
+
+```
+openssl rand -base64 64
+```
+
+and just paste the output as the JWT token in .env
 
 ### 3. Start MySQL
 
