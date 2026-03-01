@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import api from '../api/axiosConfig';
 
 export const AuthContext = createContext(null);
 
@@ -16,6 +17,8 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem('token');
     return token ? decodeToken(token) : null;
   });
+  const [onboardingCompleted, setOnboardingCompleted] = useState(null);
+  const [onboardingLoading, setOnboardingLoading] = useState(false);
 
   const isAuthenticated = !!user;
 
@@ -26,22 +29,41 @@ export function AuthProvider({ children }) {
       if (decoded?.exp && decoded.exp * 1000 < Date.now()) {
         localStorage.removeItem('token');
         setUser(null);
+        return;
       }
     }
   }, []);
 
+  useEffect(() => {
+    if (isAuthenticated && onboardingCompleted === null) {
+      setOnboardingLoading(true);
+      api.get('/onboarding/status')
+        .then((res) => {
+          setOnboardingCompleted(res.data.completed);
+        })
+        .catch(() => {
+          setOnboardingCompleted(false);
+        })
+        .finally(() => {
+          setOnboardingLoading(false);
+        });
+    }
+  }, [isAuthenticated, onboardingCompleted]);
+
   const login = (token) => {
     localStorage.setItem('token', token);
     setUser(decodeToken(token));
+    setOnboardingCompleted(null);
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
+    setOnboardingCompleted(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, onboardingCompleted, setOnboardingCompleted, onboardingLoading }}>
       {children}
     </AuthContext.Provider>
   );
