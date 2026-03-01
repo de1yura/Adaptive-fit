@@ -48,6 +48,7 @@ public class AdaptiveEngineService {
 
         int currentVersion = currentPlan.getVersion();
         List<String> changes = new ArrayList<>();
+        List<String> adaptationDetails = new ArrayList<>();
 
         // Track modifications
         int newDaysPerWeek = currentPlan.getDaysPerWeek();
@@ -58,6 +59,7 @@ public class AdaptiveEngineService {
 
         // Rule 1: Adherence Drop
         if (request.getSessionsCompleted() < currentPlan.getDaysPerWeek() * 0.6) {
+            adaptationDetails.add("Adherence Drop");
             if (newDaysPerWeek > 2) {
                 newDaysPerWeek--;
                 changes.add("Reduced training days from " + currentPlan.getDaysPerWeek() + " to " + newDaysPerWeek + " due to low adherence");
@@ -71,6 +73,7 @@ public class AdaptiveEngineService {
 
         // Rule 2: Too Hard
         if (request.getDifficultyRating() >= 4) {
+            adaptationDetails.add("Too Hard");
             IntensityLevel reduced = reduceIntensity(newIntensity);
             if (reduced != newIntensity) {
                 changes.add("Reduced intensity from " + newIntensity.name() + " to " + reduced.name() + " because difficulty was rated too hard");
@@ -82,6 +85,7 @@ public class AdaptiveEngineService {
 
         // Rule 3: Too Easy
         if (request.getDifficultyRating() <= 2 && request.getSessionsCompleted() >= currentPlan.getDaysPerWeek()) {
+            adaptationDetails.add("Too Easy");
             IntensityLevel increased = increaseIntensity(newIntensity);
             if (increased != newIntensity) {
                 changes.add("Increased intensity from " + newIntensity.name() + " to " + increased.name() + " because workouts were too easy");
@@ -93,6 +97,7 @@ public class AdaptiveEngineService {
 
         // Rule 4: Perfect — no changes needed (implicit)
         if (request.getSessionsCompleted() >= currentPlan.getDaysPerWeek() && request.getDifficultyRating() == 3) {
+            adaptationDetails.add("Perfect Adherence");
             if (changes.isEmpty()) {
                 changes.add("Perfect adherence and difficulty — no plan changes needed");
             }
@@ -113,6 +118,7 @@ public class AdaptiveEngineService {
             }
             double adherenceRate = totalPlanned > 0 ? (double) totalSessions / totalPlanned : 1.0;
             if (adherenceRate < 0.8) {
+                adaptationDetails.add("Goal Timeline");
                 IntensityLevel increased = increaseIntensity(newIntensity);
                 if (increased != newIntensity) {
                     changes.add("Increased intensity from " + newIntensity.name() + " to " + increased.name() + " to catch up on goal timeline");
@@ -136,6 +142,7 @@ public class AdaptiveEngineService {
                 boolean weightUnchanged = recentWeights.get(0).compareTo(recentWeights.get(1)) == 0
                         && recentWeights.get(1).compareTo(recentWeights.get(2)) == 0;
                 if (weightUnchanged) {
+                    adaptationDetails.add("Nutrition Adjustment");
                     FitnessGoal goal = profile.getFitnessGoal();
                     if (goal == FitnessGoal.FAT_LOSS) {
                         calorieAdjustment = -150;
@@ -232,7 +239,7 @@ public class AdaptiveEngineService {
                 ? "No changes needed — keep up the good work!"
                 : String.join("; ", changes);
 
-        return new AdaptationResponse(changeSummary, changesWereMade ? currentVersion + 1 : currentVersion, changesWereMade);
+        return new AdaptationResponse(changeSummary, changesWereMade ? currentVersion + 1 : currentVersion, changesWereMade, adaptationDetails);
     }
 
     private IntensityLevel reduceIntensity(IntensityLevel current) {
