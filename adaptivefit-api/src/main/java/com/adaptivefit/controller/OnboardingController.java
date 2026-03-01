@@ -3,7 +3,9 @@ package com.adaptivefit.controller;
 import com.adaptivefit.dto.request.OnboardingRequest;
 import com.adaptivefit.exception.ResourceNotFoundException;
 import com.adaptivefit.model.User;
+import com.adaptivefit.model.UserProfile;
 import com.adaptivefit.model.WorkoutPlan;
+import com.adaptivefit.repository.UserProfileRepository;
 import com.adaptivefit.repository.UserRepository;
 import com.adaptivefit.service.OnboardingService;
 import jakarta.validation.Valid;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -20,10 +23,13 @@ public class OnboardingController {
 
     private final OnboardingService onboardingService;
     private final UserRepository userRepository;
+    private final UserProfileRepository userProfileRepository;
 
-    public OnboardingController(OnboardingService onboardingService, UserRepository userRepository) {
+    public OnboardingController(OnboardingService onboardingService, UserRepository userRepository,
+                                UserProfileRepository userProfileRepository) {
         this.onboardingService = onboardingService;
         this.userRepository = userRepository;
+        this.userProfileRepository = userProfileRepository;
     }
 
     @PostMapping("/submit")
@@ -45,6 +51,50 @@ public class OnboardingController {
         Long userId = getUserId(authentication);
         boolean completed = onboardingService.getOnboardingStatus(userId);
         return ResponseEntity.ok(Map.of("completed", completed));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<Map<String, Object>> getProfile(Authentication authentication) {
+        Long userId = getUserId(authentication);
+        UserProfile profile = userProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
+
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("fitnessGoal", profile.getFitnessGoal());
+        data.put("experienceLevel", profile.getExperienceLevel());
+        data.put("daysPerWeek", profile.getDaysPerWeek());
+        data.put("sessionDurationMinutes", profile.getSessionDurationMinutes());
+        data.put("equipmentAccess", profile.getEquipmentAccess());
+        data.put("dietaryPreference", profile.getDietaryPreference());
+        data.put("heightCm", profile.getHeightCm());
+        data.put("weightKg", profile.getWeightKg());
+        data.put("age", profile.getAge());
+        data.put("goalDurationWeeks", profile.getGoalDurationWeeks());
+
+        return ResponseEntity.ok(data);
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<Map<String, String>> updateProfile(
+            @Valid @RequestBody OnboardingRequest request,
+            Authentication authentication) {
+        Long userId = getUserId(authentication);
+        UserProfile profile = userProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found"));
+
+        profile.setFitnessGoal(request.getFitnessGoal());
+        profile.setExperienceLevel(request.getExperienceLevel());
+        profile.setDaysPerWeek(request.getDaysPerWeek());
+        profile.setSessionDurationMinutes(request.getSessionDurationMinutes());
+        profile.setEquipmentAccess(request.getEquipmentAccess());
+        profile.setDietaryPreference(request.getDietaryPreference());
+        profile.setHeightCm(request.getHeightCm());
+        profile.setWeightKg(request.getWeightKg());
+        profile.setAge(request.getAge());
+        profile.setGoalDurationWeeks(request.getGoalDurationWeeks());
+        userProfileRepository.save(profile);
+
+        return ResponseEntity.ok(Map.of("message", "Profile updated successfully"));
     }
 
     private Long getUserId(Authentication authentication) {

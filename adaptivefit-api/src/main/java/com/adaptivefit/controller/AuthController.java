@@ -1,5 +1,6 @@
 package com.adaptivefit.controller;
 
+import com.adaptivefit.dto.request.ChangePasswordRequest;
 import com.adaptivefit.dto.request.ForgotPasswordRequest;
 import com.adaptivefit.dto.request.LoginRequest;
 import com.adaptivefit.dto.request.RegisterRequest;
@@ -9,6 +10,7 @@ import com.adaptivefit.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -51,5 +53,13 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
         authService.resetPassword(request.getToken(), request.getNewPassword());
         return ResponseEntity.ok(Map.of("message", "Password reset successful"));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Map<String, String>> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request,
+            Authentication authentication) {
+        authService.changePassword(authentication.getName(), request.getCurrentPassword(), request.getNewPassword());
+        return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
     }
 }
