@@ -40,7 +40,7 @@ export default function VerifyEmailPage() {
   }, [searchParams]);
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" component="section" aria-label="Email verification">
       <Box sx={{ mt: 8, display: 'flex', justifyContent: 'center' }}>
         <Card sx={{ width: '100%' }}>
           <CardContent sx={{ p: 4, textAlign: 'center' }}>

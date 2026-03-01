@@ -70,8 +70,9 @@ export default function CheckInForm({ onSubmit, submitting, weekNumber }) {
         />
 
         <Box>
-          <Typography gutterBottom>Difficulty Rating</Typography>
+          <Typography id="difficulty-rating-label" gutterBottom>Difficulty Rating</Typography>
           <Slider
+            aria-labelledby="difficulty-rating-label"
             value={difficultyRating}
             onChange={(e, val) => setDifficultyRating(val)}
             min={1}

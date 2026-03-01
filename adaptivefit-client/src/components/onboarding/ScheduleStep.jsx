@@ -27,10 +27,11 @@ export default function ScheduleStep({ formData, setFormData }) {
       </Typography>
 
       <Box sx={{ mb: 5, px: 2 }}>
-        <Typography variant="h6" gutterBottom>
+        <Typography id="days-per-week-label" variant="h6" gutterBottom>
           Days per week: {formData.daysPerWeek}
         </Typography>
         <Slider
+          aria-labelledby="days-per-week-label"
           value={formData.daysPerWeek}
           onChange={(e, value) => setFormData((prev) => ({ ...prev, daysPerWeek: value }))}
           min={1}
@@ -42,10 +43,11 @@ export default function ScheduleStep({ formData, setFormData }) {
       </Box>
 
       <Box>
-        <Typography variant="h6" gutterBottom>
+        <Typography id="session-duration-label" variant="h6" gutterBottom>
           Session duration (minutes)
         </Typography>
         <ToggleButtonGroup
+          aria-labelledby="session-duration-label"
           value={formData.sessionDurationMinutes}
           exclusive
           onChange={(e, value) => {

@@ -48,7 +48,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" component="section" aria-label="Forgot password">
       <Box sx={{ mt: 8, display: 'flex', justifyContent: 'center' }}>
         <Card sx={{ width: '100%' }}>
           <CardContent sx={{ p: 4 }}>

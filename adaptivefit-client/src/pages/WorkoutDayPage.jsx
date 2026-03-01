@@ -113,7 +113,7 @@ export default function WorkoutDayPage() {
 
   if (loading) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Workout day">
         <Box sx={{ mt: 4 }}>
           <Skeleton variant="text" width={300} height={48} />
           <Skeleton variant="text" width={180} height={28} sx={{ mt: 1 }} />
@@ -125,7 +125,7 @@ export default function WorkoutDayPage() {
 
   if (error) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Workout day">
         <Box sx={{ mt: 4 }}>
           <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/workouts')} sx={{ mb: 2 }}>
             Back to Workouts
@@ -137,7 +137,7 @@ export default function WorkoutDayPage() {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" component="section" aria-label="Workout day">
       <Box sx={{ mt: 4 }}>
         <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/workouts')} sx={{ mb: 2 }}>
           Back to Workouts

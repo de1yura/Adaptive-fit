@@ -5,7 +5,7 @@ import OnboardingWizard from '../components/onboarding/OnboardingWizard';
 
 export default function OnboardingPage() {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" component="section" aria-label="Onboarding">
       <Box sx={{ mt: 4, mb: 4 }}>
         <Typography variant="h4" align="center" gutterBottom>
           Set Up Your Profile

@@ -73,7 +73,7 @@ export default function CheckInPage() {
 
   if (loading) {
     return (
-      <Container maxWidth="md">
+      <Container maxWidth="md" component="section" aria-label="Check-in">
         <Box sx={{ mt: 4 }}>
           <Skeleton variant="text" width={250} height={48} />
           <Skeleton variant="rectangular" height={300} sx={{ borderRadius: 2, mt: 2 }} />
@@ -85,7 +85,7 @@ export default function CheckInPage() {
 
   if (error) {
     return (
-      <Container maxWidth="md">
+      <Container maxWidth="md" component="section" aria-label="Check-in">
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>Weekly Check-In</Typography>
           <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
@@ -95,7 +95,7 @@ export default function CheckInPage() {
   }
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" component="section" aria-label="Check-in">
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>Weekly Check-In</Typography>
 

@@ -37,7 +37,7 @@ export default function WorkoutsPage() {
 
   if (loading) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Workouts">
         <Box sx={{ mt: 4 }}>
           <Skeleton variant="text" width={250} height={48} />
           <Skeleton variant="text" width={180} height={28} sx={{ mt: 1 }} />
@@ -55,7 +55,7 @@ export default function WorkoutsPage() {
 
   if (error) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Workouts">
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>My Workouts</Typography>
           <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
@@ -66,7 +66,7 @@ export default function WorkoutsPage() {
 
   if (!schedule || !schedule.days || schedule.days.length === 0) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Workouts">
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>My Workouts</Typography>
           <Alert severity="info" sx={{ mt: 2 }}>
@@ -78,7 +78,7 @@ export default function WorkoutsPage() {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" component="section" aria-label="Workouts">
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>My Workouts</Typography>
         <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mb: 3 }}>

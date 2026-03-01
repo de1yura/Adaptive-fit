@@ -65,7 +65,7 @@ export default function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" component="section" aria-label="Reset password">
         <Box sx={{ mt: 8, display: 'flex', justifyContent: 'center' }}>
           <Card sx={{ width: '100%' }}>
             <CardContent sx={{ p: 4, textAlign: 'center' }}>
@@ -86,7 +86,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" component="section" aria-label="Reset password">
       <Box sx={{ mt: 8, display: 'flex', justifyContent: 'center' }}>
         <Card sx={{ width: '100%' }}>
           <CardContent sx={{ p: 4 }}>

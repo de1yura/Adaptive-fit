@@ -169,7 +169,7 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <Container maxWidth="md">
+      <Container maxWidth="md" component="section" aria-label="Settings">
         <Box sx={{ mt: 4 }}>
           <Skeleton variant="text" width={200} height={48} />
           <Skeleton variant="rectangular" height={400} sx={{ borderRadius: 2, mt: 2 }} />
@@ -180,7 +180,7 @@ export default function SettingsPage() {
 
   if (error) {
     return (
-      <Container maxWidth="md">
+      <Container maxWidth="md" component="section" aria-label="Settings">
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>Settings</Typography>
           <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
@@ -190,7 +190,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" component="section" aria-label="Settings">
       <Box sx={{ mt: 4, mb: 4 }}>
         <Typography variant="h4" gutterBottom>Settings</Typography>
 

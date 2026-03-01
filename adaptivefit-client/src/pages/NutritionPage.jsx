@@ -62,7 +62,7 @@ export default function NutritionPage() {
 
   if (loading) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Nutrition">
         <Box sx={{ mt: 4 }}>
           <Skeleton variant="text" width={200} height={48} />
           <Skeleton variant="rectangular" height={180} sx={{ borderRadius: 2, mt: 2 }} />
@@ -74,7 +74,7 @@ export default function NutritionPage() {
 
   if (error) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Nutrition">
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>Nutrition</Typography>
           <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
@@ -84,7 +84,7 @@ export default function NutritionPage() {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" component="section" aria-label="Nutrition">
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>Nutrition</Typography>
 

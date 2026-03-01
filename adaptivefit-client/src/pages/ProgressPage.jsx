@@ -41,7 +41,7 @@ export default function ProgressPage() {
 
   if (loading) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Progress">
         <Box sx={{ mt: 4 }}>
           <Skeleton variant="text" width={200} height={48} />
           <Skeleton variant="rectangular" height={48} sx={{ mt: 2, borderRadius: 1 }} />
@@ -53,7 +53,7 @@ export default function ProgressPage() {
 
   if (error) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Progress">
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>Progress</Typography>
           <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
@@ -69,7 +69,7 @@ export default function ProgressPage() {
 
   if (hasNoData) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Progress">
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>Progress</Typography>
           <Alert severity="info" sx={{ mt: 2 }}>No progress data yet</Alert>
@@ -79,7 +79,7 @@ export default function ProgressPage() {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" component="section" aria-label="Progress">
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>Progress</Typography>
 

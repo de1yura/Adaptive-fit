@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 
 export default function LandingPage() {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" component="section" aria-label="Welcome">
       <Box sx={{ textAlign: 'center', mt: 10 }}>
         <Typography variant="h2" gutterBottom>
           AdaptiveFit

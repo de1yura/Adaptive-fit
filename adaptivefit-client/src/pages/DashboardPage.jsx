@@ -58,7 +58,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Dashboard">
         <Box sx={{ mt: 4 }}>
           <Skeleton variant="text" width={300} height={48} />
           <Grid container spacing={3} sx={{ mt: 2 }}>
@@ -82,7 +82,7 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="section" aria-label="Dashboard">
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>Dashboard</Typography>
           <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
@@ -92,7 +92,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" component="section" aria-label="Dashboard">
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>
           Welcome back, {user?.sub || 'User'}!
@@ -140,6 +140,7 @@ export default function DashboardPage() {
                     ? Math.min(100, (dashboard.workoutsThisWeek / 7) * 100)
                     : 0}
                   sx={{ mt: 1, borderRadius: 1 }}
+                  aria-label="Weekly workout progress"
                 />
               </CardContent>
             </Card>
@@ -162,6 +163,7 @@ export default function DashboardPage() {
                   value={dashboard?.adherencePercentage ?? 0}
                   color="secondary"
                   sx={{ mt: 1, borderRadius: 1 }}
+                  aria-label="Adherence progress"
                 />
               </CardContent>
             </Card>
