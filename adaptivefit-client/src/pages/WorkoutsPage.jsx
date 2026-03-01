@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Skeleton from '@mui/material/Skeleton';
 import Alert from '@mui/material/Alert';
 import Chip from '@mui/material/Chip';
+import toast from 'react-hot-toast';
 import { getWeeklySchedule } from '../api/workoutApi';
 import WeeklyPlanView from '../components/workouts/WeeklyPlanView';
 
@@ -23,7 +24,9 @@ export default function WorkoutsPage() {
         if (err.response?.status === 404) {
           setSchedule(null);
         } else {
-          setError(err.response?.data?.message || 'Failed to load your workout plan.');
+          const msg = err.response?.data?.message || 'Failed to load your workout plan.';
+          setError(msg);
+          toast.error(msg);
         }
       } finally {
         setLoading(false);
@@ -67,7 +70,7 @@ export default function WorkoutsPage() {
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>My Workouts</Typography>
           <Alert severity="info" sx={{ mt: 2 }}>
-            You don&apos;t have an active workout plan yet. Complete onboarding to get your personalised plan.
+            No active plan &mdash; complete onboarding first
           </Alert>
         </Box>
       </Container>

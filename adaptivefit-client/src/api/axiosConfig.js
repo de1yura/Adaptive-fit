@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -15,7 +16,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (!error.response) {
+      toast.error('Unable to connect to server');
+      return Promise.reject(error);
+    }
+    if (error.response.status === 401) {
       localStorage.removeItem('token');
       window.location.href = '/login';
     }

@@ -20,9 +20,22 @@ export default function CheckInForm({ onSubmit, submitting, weekNumber }) {
   const [difficultyRating, setDifficultyRating] = useState(3);
   const [currentWeightKg, setCurrentWeightKg] = useState('');
   const [notes, setNotes] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+    if (sessionsCompleted === '') {
+      newErrors.sessionsCompleted = 'Sessions completed is required';
+    } else if (Number(sessionsCompleted) < 0) {
+      newErrors.sessionsCompleted = 'Must be 0 or greater';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validate()) return;
     const payload = {
       weekNumber,
       sessionsCompleted: parseInt(sessionsCompleted, 10),
@@ -46,7 +59,12 @@ export default function CheckInForm({ onSubmit, submitting, weekNumber }) {
           type="number"
           required
           value={sessionsCompleted}
-          onChange={(e) => setSessionsCompleted(e.target.value)}
+          onChange={(e) => {
+            setSessionsCompleted(e.target.value);
+            if (errors.sessionsCompleted) setErrors((prev) => ({ ...prev, sessionsCompleted: '' }));
+          }}
+          error={!!errors.sessionsCompleted}
+          helperText={errors.sessionsCompleted}
           inputProps={{ min: 0 }}
           fullWidth
         />

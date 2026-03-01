@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Skeleton from '@mui/material/Skeleton';
 import Alert from '@mui/material/Alert';
+import toast from 'react-hot-toast';
 import { getProgressData, getPlanHistory } from '../api/progressApi';
 import WeightChart from '../components/progress/WeightChart';
 import AdherenceChart from '../components/progress/AdherenceChart';
@@ -28,7 +29,9 @@ export default function ProgressPage() {
         setProgress(progressRes.data);
         setPlanHistory(historyRes.data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load progress data.');
+        const msg = err.response?.data?.message || 'Failed to load progress data.';
+        setError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }
@@ -54,6 +57,22 @@ export default function ProgressPage() {
         <Box sx={{ mt: 4 }}>
           <Typography variant="h4" gutterBottom>Progress</Typography>
           <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
+        </Box>
+      </Container>
+    );
+  }
+
+  const hasNoData =
+    (!progress?.weightTrend || progress.weightTrend.length === 0) &&
+    (!progress?.weeklyAdherence || progress.weeklyAdherence.length === 0) &&
+    (!planHistory || planHistory.length === 0);
+
+  if (hasNoData) {
+    return (
+      <Container maxWidth="lg">
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h4" gutterBottom>Progress</Typography>
+          <Alert severity="info" sx={{ mt: 2 }}>No progress data yet</Alert>
         </Box>
       </Container>
     );

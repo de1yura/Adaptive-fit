@@ -16,6 +16,7 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import toast from 'react-hot-toast';
 import useAuth from '../hooks/useAuth';
 import { getDashboard } from '../api/progressApi';
 
@@ -31,7 +32,9 @@ export default function DashboardPage() {
         const res = await getDashboard();
         setDashboard(res.data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load dashboard data.');
+        const msg = err.response?.data?.message || 'Failed to load dashboard data.';
+        setError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }

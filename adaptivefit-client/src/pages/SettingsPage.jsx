@@ -83,7 +83,9 @@ export default function SettingsPage() {
           goalDurationWeeks: res.data.goalDurationWeeks || '',
         });
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load profile.');
+        const msg = err.response?.data?.message || 'Failed to load profile.';
+        setError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }

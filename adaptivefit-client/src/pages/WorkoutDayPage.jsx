@@ -47,7 +47,9 @@ export default function WorkoutDayPage() {
         });
         setLogs(initialLogs);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load workout day.');
+        const msg = err.response?.data?.message || 'Failed to load workout day.';
+        setError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }

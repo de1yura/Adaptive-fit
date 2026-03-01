@@ -31,7 +31,9 @@ export default function NutritionPage() {
       setTargets(targetsRes.data);
       setHistory(historyRes.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load nutrition data.');
+      const msg = err.response?.data?.message || 'Failed to load nutrition data.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -86,8 +88,10 @@ export default function NutritionPage() {
       <Box sx={{ mt: 4 }}>
         <Typography variant="h4" gutterBottom>Nutrition</Typography>
 
-        {targets && (
+        {targets ? (
           <NutritionDashboard targets={targets} todayLog={todayLog} />
+        ) : (
+          <Alert severity="info" sx={{ mb: 3 }}>No nutrition plan found</Alert>
         )}
 
         <NutritionLogForm onSubmit={handleLogSubmit} submitting={submitting} />

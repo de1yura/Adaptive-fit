@@ -35,7 +35,9 @@ export default function CheckInPage() {
       setDue(dueRes.data.due);
       setHistory(historyRes.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load check-in data.');
+      const msg = err.response?.data?.message || 'Failed to load check-in data.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -120,7 +122,7 @@ export default function CheckInPage() {
           adaptation={adaptation}
         />
 
-        {history.length > 0 && (
+        {history.length > 0 ? (
           <Paper variant="outlined" sx={{ mt: 3 }}>
             <Typography variant="h6" sx={{ p: 2, pb: 0 }}>Check-In History</Typography>
             <TableContainer>
@@ -152,6 +154,8 @@ export default function CheckInPage() {
               </Table>
             </TableContainer>
           </Paper>
+        ) : (
+          <Alert severity="info" sx={{ mt: 3 }}>No check-ins submitted yet</Alert>
         )}
       </Box>
     </Container>
