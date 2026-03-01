@@ -17,8 +17,9 @@ import Chip from '@mui/material/Chip';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import toast from 'react-hot-toast';
-import { getDayDetail, completeWorkout } from '../api/workoutApi';
+import { getDayDetail, completeWorkout, substituteExercise } from '../api/workoutApi';
 import ExerciseRow from '../components/workouts/ExerciseRow';
+import ExerciseSubstitutionDialog from '../components/workouts/ExerciseSubstitutionDialog';
 
 export default function WorkoutDayPage() {
   const { dayId } = useParams();
@@ -29,6 +30,8 @@ export default function WorkoutDayPage() {
   const [completed, setCompleted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [logs, setLogs] = useState({});
+  const [subDialogOpen, setSubDialogOpen] = useState(false);
+  const [subExercise, setSubExercise] = useState(null);
 
   useEffect(() => {
     const fetchDay = async () => {
@@ -75,6 +78,34 @@ export default function WorkoutDayPage() {
       toast.error(err.response?.data?.message || 'Failed to complete workout.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleOpenSubstitute = (exercise) => {
+    setSubExercise(exercise);
+    setSubDialogOpen(true);
+  };
+
+  const handleCloseSubstitute = () => {
+    setSubDialogOpen(false);
+    setSubExercise(null);
+  };
+
+  const handleConfirmSubstitute = async (exerciseId, newExerciseId) => {
+    try {
+      const res = await substituteExercise({ exerciseId, newExerciseId });
+      setDay((prev) => ({
+        ...prev,
+        exercises: prev.exercises.map((ex) =>
+          ex.exerciseId === exerciseId
+            ? { ...ex, exerciseName: res.data.newExercise }
+            : ex
+        ),
+      }));
+      toast.success(`Substituted with ${res.data.newExercise}`);
+      handleCloseSubstitute();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to substitute exercise.');
     }
   };
 
@@ -140,6 +171,7 @@ export default function WorkoutDayPage() {
                   log={logs[exercise.exerciseId] || { actualSets: '', actualReps: '', actualWeightKg: '' }}
                   onLogChange={handleLogChange(exercise.exerciseId)}
                   disabled={completed}
+                  onSubstitute={handleOpenSubstitute}
                 />
               ))}
             </TableBody>
@@ -158,6 +190,13 @@ export default function WorkoutDayPage() {
             </Button>
           </Box>
         )}
+
+        <ExerciseSubstitutionDialog
+          open={subDialogOpen}
+          onClose={handleCloseSubstitute}
+          exercise={subExercise}
+          onConfirm={handleConfirmSubstitute}
+        />
       </Box>
     </Container>
   );

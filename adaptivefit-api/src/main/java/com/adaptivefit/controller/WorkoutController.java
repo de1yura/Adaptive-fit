@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -45,6 +46,14 @@ public class WorkoutController {
             Authentication authentication) {
         Long userId = getUserId(authentication);
         return ResponseEntity.ok(workoutService.completeWorkout(userId, request));
+    }
+
+    @GetMapping("/exercises/{exerciseId}/alternatives")
+    public ResponseEntity<List<Map<String, Object>>> getAlternativeExercises(
+            @PathVariable Long exerciseId,
+            Authentication authentication) {
+        Long userId = getUserId(authentication);
+        return ResponseEntity.ok(workoutService.getAlternativeExercises(userId, exerciseId));
     }
 
     @PutMapping("/substitute")

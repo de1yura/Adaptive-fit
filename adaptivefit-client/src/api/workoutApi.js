@@ -11,3 +11,6 @@ export const completeWorkout = (payload) =>
 
 export const substituteExercise = (payload) =>
   api.put('/workouts/substitute', payload);
+
+export const getAlternativeExercises = (exerciseId) =>
+  api.get(`/workouts/exercises/${exerciseId}/alternatives`);

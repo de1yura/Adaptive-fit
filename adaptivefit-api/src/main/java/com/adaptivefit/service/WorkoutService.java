@@ -205,6 +205,52 @@ public class WorkoutService {
         return result;
     }
 
+    public List<Map<String, Object>> getAlternativeExercises(Long userId, Long exerciseId) {
+        WorkoutPlan plan = workoutPlanRepository.findByUserIdAndStatus(userId, PlanStatus.ACTIVE)
+                .orElseThrow(() -> new ResourceNotFoundException("No active workout plan found"));
+
+        WorkoutExercise exercise = workoutExerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new ResourceNotFoundException("Exercise not found in your plan"));
+
+        if (!exercise.getWorkoutDay().getWorkoutPlan().getId().equals(plan.getId())) {
+            throw new ResourceNotFoundException("Exercise not found in your plan");
+        }
+
+        String muscleGroup = findMuscleGroupForExercise(exercise.getExerciseName());
+        if (muscleGroup == null) {
+            return List.of();
+        }
+
+        List<ExerciseLibrary> candidates = exerciseLibraryRepository.findByMuscleGroup(muscleGroup);
+
+        UserProfile profile = userProfileRepository.findByUserId(userId).orElse(null);
+        if (profile != null) {
+            List<EquipmentRequired> allowed = getAllowedEquipment(profile.getEquipmentAccess());
+            candidates = candidates.stream()
+                    .filter(c -> allowed.contains(c.getEquipmentRequired()))
+                    .toList();
+        }
+
+        // Exclude the current exercise
+        String currentName = exercise.getExerciseName();
+        candidates = candidates.stream()
+                .filter(c -> !c.getName().equals(currentName))
+                .toList();
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (ExerciseLibrary lib : candidates) {
+            Map<String, Object> exMap = new LinkedHashMap<>();
+            exMap.put("id", lib.getId());
+            exMap.put("name", lib.getName());
+            exMap.put("description", lib.getDescription());
+            exMap.put("difficulty", lib.getDifficulty().name());
+            exMap.put("equipmentRequired", lib.getEquipmentRequired().name());
+            exMap.put("muscleGroup", lib.getMuscleGroup());
+            result.add(exMap);
+        }
+        return result;
+    }
+
     private String findMuscleGroupForExercise(String exerciseName) {
         List<ExerciseLibrary> matches = exerciseLibraryRepository.findAll().stream()
                 .filter(e -> e.getName().equals(exerciseName))

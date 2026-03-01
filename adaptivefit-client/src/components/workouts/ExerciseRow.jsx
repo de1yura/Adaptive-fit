@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import ExerciseLogForm from './ExerciseLogForm';
 
-export default function ExerciseRow({ exercise, log, onLogChange, disabled }) {
+export default function ExerciseRow({ exercise, log, onLogChange, disabled, onSubstitute }) {
   const [showLog, setShowLog] = useState(false);
 
   return (
@@ -22,7 +22,12 @@ export default function ExerciseRow({ exercise, log, onLogChange, disabled }) {
               {showLog ? 'Hide Log' : 'Log'}
             </Button>
           )}
-          <Button size="small" variant="outlined" disabled={disabled}>
+          <Button
+            size="small"
+            variant="outlined"
+            disabled={disabled}
+            onClick={() => onSubstitute && onSubstitute(exercise)}
+          >
             Substitute
           </Button>
         </TableCell>
