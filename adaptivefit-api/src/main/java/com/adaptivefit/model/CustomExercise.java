@@ -8,46 +8,34 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "custom_exercises")
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public class CustomExercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false)
-    private String passwordHash;
+    private String name;
 
     @Column(nullable = false)
-    private boolean emailVerified = false;
-
-    private String verificationToken;
-
-    private String resetToken;
-
-    private LocalDateTime resetTokenExpiry;
+    private String muscleGroup;
 
     @Column(nullable = false)
-    private boolean admin = false;
+    private String equipment = "gym";
 
+    @Column(updatable = false)
     private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
     }
 }

@@ -1,8 +1,10 @@
 package com.adaptivefit.controller;
 
-import com.adaptivefit.exception.BadRequestException;
+import com.adaptivefit.exception.ForbiddenException;
 import com.adaptivefit.model.EventLog;
+import com.adaptivefit.model.User;
 import com.adaptivefit.repository.EventLogRepository;
+import com.adaptivefit.repository.UserRepository;
 import com.adaptivefit.service.DataExportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,13 +26,16 @@ public class AdminController {
 
     private final EventLogRepository eventLogRepository;
     private final DataExportService dataExportService;
+    private final UserRepository userRepository;
     private final String adminEmail;
 
     public AdminController(EventLogRepository eventLogRepository,
                            DataExportService dataExportService,
+                           UserRepository userRepository,
                            @Value("${app.admin.email}") String adminEmail) {
         this.eventLogRepository = eventLogRepository;
         this.dataExportService = dataExportService;
+        this.userRepository = userRepository;
         this.adminEmail = adminEmail;
     }
 
@@ -74,7 +79,10 @@ public class AdminController {
     private void checkAdmin(Authentication authentication) {
         String email = authentication.getName();
         if (!adminEmail.equals(email)) {
-            throw new BadRequestException("Admin access required");
+            User user = userRepository.findByEmail(email).orElse(null);
+            if (user == null || !user.isAdmin()) {
+                throw new ForbiddenException("Admin access required");
+            }
         }
     }
 }

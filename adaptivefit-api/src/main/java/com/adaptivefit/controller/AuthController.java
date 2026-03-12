@@ -6,6 +6,8 @@ import com.adaptivefit.dto.request.LoginRequest;
 import com.adaptivefit.dto.request.RegisterRequest;
 import com.adaptivefit.dto.request.ResetPasswordRequest;
 import com.adaptivefit.dto.response.AuthResponse;
+import com.adaptivefit.model.User;
+import com.adaptivefit.repository.UserRepository;
 import com.adaptivefit.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,9 +25,11 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepository userRepository;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserRepository userRepository) {
         this.authService = authService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/register")
@@ -46,7 +50,9 @@ public class AuthController {
     @Operation(summary = "Log in", description = "Authenticates a user and returns a JWT token")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         String token = authService.login(request.getEmail(), request.getPassword());
-        return ResponseEntity.ok(new AuthResponse(token, request.getEmail(), "Login successful"));
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+        boolean isAdmin = user != null && user.isAdmin();
+        return ResponseEntity.ok(new AuthResponse(token, request.getEmail(), "Login successful", isAdmin));
     }
 
     @PostMapping("/forgot-password")
